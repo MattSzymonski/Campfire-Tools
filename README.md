@@ -7,9 +7,9 @@ Campfire tools is a C# utilities library.
 - Open AI utilities
 
 ## Usage in C# projects
-To use this library in a C# project, add one of the following snippets to the csproj file:
+To use this library in a C# project, add one of the following snippets to the `.csproj` file:
 
-### Reference the library
+### Reference the library (recommended)
 This requires DLL to be rebuild each time a change in the library is introduced.
 ```
 <Reference Include="CampfireTools">
@@ -17,7 +17,7 @@ This requires DLL to be rebuild each time a change in the library is introduced.
 </Reference>
 ```
 
-### Reference the project
+### Reference the project (not recommended)
 Not recommended for Docker programs due to problems with relative reference paths.
 This requires to have access to the project files.
 
@@ -31,9 +31,9 @@ This requires to have access to the project files.
 ## Usage in C# docker projects
 Depending on the project structure, the library can be linked in two ways: DLL or project reference.
 
-If library is referenced as DLL in /libs directory then either:
-1. Have DLL built in /libs folder in the source (this requires rebuilding it in before creating Docker image)
-2. Have library's source code and build it there (this requires copying its source code to Docker image)
+1. If library is referenced as DLL in /libs directory then either:
+  2. Have DLL built in /libs folder in the source (this requires rebuilding it in before creating Docker image)
+  3. Have library's source code and build it there (this requires copying its source code to Docker image)
 ```
 # --- BUILD LIBRARIES ---
 ARG CAMPFIRE_TOOLS_DIR_PATH=../../campfire-tools/
@@ -45,10 +45,10 @@ RUN dotnet build -o ./output
 COPY ./output/CampfireTools.dll libs/CampfireTools.dll
 ```
 
-If library is referenced as project then in dockerfile copy its source code.
+2. If library is referenced as project then in dockerfile copy its source code and build along with the project.  
 !!! The problem is that we need to assure that relative path in local csproj as well as csproj file in docker image are valid.
 And since csproj file is just being copied it means that sometimes there is no way to assure this. 
-Eg. On host project is in /home/test/programs/docker/my-project and lib is in /home/test/libs/my-lib
+Eg. On host project is in `/home/test/programs/docker/my-project` and lib is in `/home/test/libs/my-lib`
 While on host it will be in /app and lib will be copied to /libs/my-lib. The relative path won't match!
 ```
 # --- COPY REFERENCED LIBRARIES ---
@@ -57,8 +57,6 @@ ARG CAMPFIRE_TOOLS_DIR_PATH=../../campfire-tools/
 WORKDIR /libs/campfire-tools
 COPY ${CAMPFIRE_TOOLS_DIR_PATH} .
 ```
-
-
 
 ## Web scrapping require chromedriver and chrome browser.
 To automate this, add to the dockerfile following lines:
@@ -83,6 +81,6 @@ RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
 RUN apt-get -y install ./google-chrome-stable_current_amd64.deb
 ```
 
-For the reference see BountyHunterAI project
+For the reference see BountyHunterAI project.
 
 
