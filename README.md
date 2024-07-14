@@ -1,5 +1,5 @@
 # Campfire Tools
-Campfire tools is a C# utilities library.
+C# utilities library
 
 ## Contents
 - Web scrapping utilities
